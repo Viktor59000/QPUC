@@ -59,23 +59,29 @@
 ## 🏗 Architecture
 
 ```
-site/
+QPUC/
 ├── api/
-│   └── get_questions.php    # API REST → JSON
+│   ├── get_questions.php    # API REST → JSON
+│   ├── login.php            # Authentification
+│   ├── register.php         # Inscription
+│   ├── check_session.php    # Vérification session
+│   └── logout.php           # Déconnexion
 ├── css/
-│   ├── style.css            # Styles principaux (~900 lignes)
+│   ├── style.css            # Styles principaux
 │   ├── background.css       # Fond animé CSS
 │   └── login.css            # Formulaire auth
 ├── js/
-│   ├── quiz.js              # Moteur de jeu (~400 lignes)
+│   ├── quiz.js              # Moteur de jeu
 │   ├── player.js            # Lecteur musique
-│   └── cursor.js            # Curseur custom optimisé
+│   └── cursor.js            # Curseur custom
+├── sql/
+│   └── setup.sql            # ⭐ Script complet (BDD + 100 questions)
 ├── db.php                   # Connexion PDO MySQL
 ├── index.php                # Accueil (Guest/Player)
 ├── login.php                # Authentification
 ├── quiz.php                 # Plateau de jeu
 ├── resultat.php             # Écran résultats
-└── admin.php                # Panel admin (mockup)
+└── admin.php                # Panel admin
 ```
 
 ### Flux de Données
@@ -110,8 +116,15 @@ MySQL (questions) → API PHP → fetch() JS → Affichage dynamique
 
 ### Import
 
-La base de données doit être configurée directement dans MySQL/phpMyAdmin.
-Les questions sont déjà présentes dans la base `quiz_db`.
+```sql
+-- Dans phpMyAdmin, importer le fichier :
+sql/setup.sql
+```
+
+Ce script crée automatiquement :
+- La base de données `quiz_db`
+- La table `users`
+- La table `questions` avec les **100 questions**
 
 ---
 
@@ -128,16 +141,15 @@ Les questions sont déjà présentes dans la base `quiz_db`.
    git clone <repository-url>
    ```
 
-2. **Créer la base de données**
-   ```sql
-   CREATE DATABASE quiz_db;
-   ```
+2. **Importer la base de données**
+   - Ouvrir phpMyAdmin
+   - Aller dans l'onglet **Importer**
+   - Sélectionner `sql/setup.sql`
+   - Cliquer sur **Exécuter**
+   
+   > ✅ Cela crée automatiquement la BDD, les tables et insère les 100 questions !
 
-3. **Importer les questions**
-   - Créer la table `questions` dans phpMyAdmin
-   - Insérer les 100 questions (structure documentée ci-dessus)
-
-4. **Configurer `db.php`** (si nécessaire)
+3. **Configurer `db.php`** (si nécessaire)
    ```php
    $host = 'localhost';
    $dbname = 'quiz_db';
@@ -145,13 +157,12 @@ Les questions sont déjà présentes dans la base `quiz_db`.
    $password = '';
    ```
 
-5. **Lancer le serveur**
+4. **Lancer le serveur**
    ```bash
-   cd site
    php -S localhost:8000
    ```
 
-6. **Ouvrir** : `http://localhost:8000/index.php`
+5. **Ouvrir** : `http://localhost:8000/index.php`
 
 ---
 
